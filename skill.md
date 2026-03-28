@@ -19,7 +19,7 @@ description: >-
 
 # SaaSpocalypse Survival Scanner
 
-> "Are you just a .md file?"
+> "Software stirbt nicht. Sie wird zum Skill."
 
 ## Zweck
 
