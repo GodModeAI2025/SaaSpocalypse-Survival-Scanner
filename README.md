@@ -2,7 +2,7 @@
 
 > **Hinweis:** Der Scanner ist Unterhaltung mit analytischem Kern — nicht als Investmentberatung zu verstehen. Die Ergebnisse dienen der spielerischen Analyse und ersetzen keine professionelle Bewertung von Unternehmen oder Technologien.
 
-**"Are you just a .md file?"**
+**"Software stirbt nicht. Sie wird zum Skill."**
 
 Analysiert SaaS-Unternehmen und bewertet, ob sie durch einen Claude Skill (eine `.md`-Datei) ersetzt werden könnten. Liefert einen Disruption Score (0–100), eine charmante Story, Claudes ehrliche Selbsteinschätzung und einen konkreten Replacement-SKILL.md-Entwurf.
 
