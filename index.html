@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaaSpocalypse Survival Scanner</title>
+<title>SaaSpocalypse Survival Scanner — Software stirbt nicht. Sie wird zum Skill.</title>
+<meta name="description" content="Analysiert SaaS-Unternehmen und bewertet, ob sie durch einen Claude Skill ersetzt werden könnten. Disruption Score, charmante Story, ehrliche KI-Selbsteinschätzung.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --teal: #0D9488;
+    --teal-dark: #0F766E;
     --teal-light: #CCFBF1;
     --teal-bg: #F0FDFA;
     --indigo: #6366F1;
@@ -19,8 +21,10 @@
     --coral: #F43F5E;
     --coral-light: #FFF1F2;
     --slate-900: #0F172A;
+    --slate-800: #1E293B;
     --slate-700: #334155;
     --slate-500: #64748B;
+    --slate-400: #94A3B8;
     --slate-300: #CBD5E1;
     --slate-200: #E2E8F0;
     --slate-100: #F1F5F9;
@@ -31,110 +35,273 @@
     --red-bg: #FEF2F2;
     --radius: 16px;
     --radius-sm: 10px;
+    --max-w: 840px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Outfit', sans-serif;
-    background: linear-gradient(160deg, #fafbfc 0%, #ecfdf5 35%, #eef2ff 65%, #fafbfc 100%);
+    background: #fafbfc;
     color: var(--slate-700);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── HERO ────────────────────────────────────── */
+  /* ── NAV ──────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,251,252,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 0 24px;
+  }
+  .nav-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 15px; color: var(--slate-900);
+    text-decoration: none; letter-spacing: -0.3px;
+  }
+  .nav-logo .logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 3px rgba(13,148,136,0.15);
+  }
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500;
+    color: var(--slate-500);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); background: var(--teal-bg); }
+  .nav-links .gh-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--slate-900); color: #fff;
+    padding: 7px 16px; border-radius: 8px; font-weight: 600;
+  }
+  .nav-links .gh-btn:hover { background: var(--slate-800); color: #fff; }
+  .nav-links .gh-btn svg { width: 16px; height: 16px; fill: #fff; }
+
+  @media (max-width: 640px) {
+    .nav-links a:not(.gh-btn) { display: none; }
+  }
+
+  /* ── HERO ─────────────────────────────────────── */
   .hero {
     text-align: center;
-    padding: 80px 24px 48px;
-    position: relative;
-    overflow: hidden;
+    padding: 96px 24px 72px;
+    position: relative; overflow: hidden;
+    background: linear-gradient(170deg, #fafbfc 0%, #ecfdf5 40%, #eef2ff 70%, #fafbfc 100%);
   }
   .hero::before {
     content: '';
     position: absolute;
-    top: -120px; left: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(13,148,136,0.07) 0%, transparent 70%);
+    top: -180px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 65%);
     pointer-events: none;
   }
   .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 18px;
-    background: var(--teal-bg);
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 18px; background: var(--teal-bg);
     border: 1px solid var(--teal-light);
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--teal);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
+    border-radius: 100px; font-size: 12px;
+    font-weight: 600; color: var(--teal);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 28px;
   }
   .hero-badge .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--teal);
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
   }
   .hero h1 {
-    font-size: clamp(40px, 6vw, 72px);
-    font-weight: 900;
-    color: var(--slate-900);
-    line-height: 1.05;
-    letter-spacing: -2px;
-    margin-bottom: 20px;
+    font-size: clamp(38px, 5.5vw, 68px);
+    font-weight: 900; color: var(--slate-900);
+    line-height: 1.08; letter-spacing: -2px;
+    margin-bottom: 24px;
   }
   .hero h1 span { color: var(--teal); }
   .hero .tagline {
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 19px; font-weight: 400;
     color: var(--slate-500);
-    max-width: 560px;
-    margin: 0 auto 28px;
-    line-height: 1.5;
+    max-width: 580px; margin: 0 auto 36px;
+    line-height: 1.55;
   }
-  .hero .disclaimer-bar {
-    display: inline-block;
-    padding: 10px 24px;
-    background: var(--amber-light);
-    border: 1px solid #FDE68A;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #92400E;
+  .hero-actions {
+    display: flex; gap: 12px;
+    justify-content: center; flex-wrap: wrap;
+    margin-bottom: 32px;
   }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none; cursor: pointer;
+    border: none; transition: all 0.25s;
+  }
+  .btn-primary {
+    background: var(--teal); color: #fff;
+    box-shadow: 0 2px 12px rgba(13,148,136,0.25);
+  }
+  .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(13,148,136,0.3); }
+  .btn-secondary {
+    background: #fff; color: var(--slate-700);
+    border: 1px solid var(--slate-200);
+  }
+  .btn-secondary:hover { border-color: var(--teal-light); color: var(--teal); background: var(--teal-bg); }
+  .btn svg { width: 18px; height: 18px; }
+
+  .disclaimer-bar {
+    display: inline-block; padding: 10px 24px;
+    background: var(--amber-light); border: 1px solid #FDE68A;
+    border-radius: 100px; font-size: 13px; font-weight: 500; color: #92400E;
+  }
+
+  /* ── SECTION LAYOUT ──────────────────────────── */
+  .section {
+    padding: 80px 24px;
+  }
+  .section-alt { background: var(--slate-50); }
+  .section-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-size: 12px; font-weight: 600; color: var(--teal);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-heading {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800; color: var(--slate-900);
+    letter-spacing: -1px; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: var(--slate-500);
+    line-height: 1.6; max-width: 620px;
+    margin-bottom: 48px;
+  }
+  .section-sub.centered { text-align: center; margin-left: auto; margin-right: auto; }
+
+  /* ── FEATURE GRID ────────────────────────────── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .feature-card {
+    padding: 28px 24px;
+    background: #fff;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius);
+    transition: all 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--teal-light);
+    box-shadow: 0 8px 32px rgba(13,148,136,0.08);
+    transform: translateY(-2px);
+  }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 16px;
+  }
+  .feature-card h3 {
+    font-size: 16px; font-weight: 700;
+    color: var(--slate-900); margin-bottom: 8px;
+  }
+  .feature-card p {
+    font-size: 14px; color: var(--slate-500); line-height: 1.6;
+  }
+
+  /* ── SCORE SCALE ─────────────────────────────── */
+  .scale-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    border-left: 4px solid;
+    background: #fff;
+    transition: all 0.2s;
+  }
+  .scale-row:hover { transform: translateX(4px); }
+  .scale-range {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    min-width: 60px;
+  }
+  .scale-label { font-size: 15px; font-weight: 700; min-width: 140px; }
+  .scale-emoji { font-size: 20px; min-width: 32px; text-align: center; }
+  .scale-desc { font-size: 13px; color: var(--slate-500); line-height: 1.5; }
+
+  @media (max-width: 640px) {
+    .scale-row { flex-wrap: wrap; gap: 8px; }
+    .scale-desc { width: 100%; }
+  }
+
+  /* ── DIMENSION EXPLAINER ─────────────────────── */
+  .dim-explainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .dim-explainer { grid-template-columns: 1fr; }
+  }
+  .dim-card {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-sm);
+  }
+  .dim-card-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .dim-card h4 { font-size: 14px; font-weight: 700; color: var(--slate-900); }
+  .dim-card .weight {
+    font-size: 12px; font-weight: 600;
+    padding: 2px 10px; border-radius: 100px;
+    background: var(--indigo-light); color: var(--indigo);
+  }
+  .dim-card p { font-size: 13px; color: var(--slate-500); line-height: 1.55; }
 
   /* ── CONTAINER ───────────────────────────────── */
   .container {
-    max-width: 840px;
-    margin: 0 auto;
-    padding: 0 24px 80px;
+    max-width: var(--max-w);
+    margin: 0 auto; padding: 0 24px;
   }
 
-  /* ── EXAMPLE HEADER ──────────────────────────── */
-  .example-label {
-    text-align: center;
-    margin-bottom: 32px;
+  /* ── EXAMPLE LABEL ───────────────────────────── */
+  .example-section {
+    padding: 80px 24px;
+    background: linear-gradient(170deg, #ecfdf5 0%, #eef2ff 50%, #fafbfc 100%);
   }
-  .example-label span {
-    display: inline-block;
-    padding: 6px 16px;
-    background: var(--indigo-light);
-    border: 1px solid #C7D2FE;
-    border-radius: 100px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--indigo);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+  .example-section .section-inner { max-width: var(--max-w); margin: 0 auto; }
+  .example-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px; background: var(--indigo-light);
+    border: 1px solid #C7D2FE; border-radius: 100px;
+    font-size: 12px; font-weight: 600; color: var(--indigo);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: 32px;
   }
 
   /* ── CARD ─────────────────────────────────────── */
@@ -143,419 +310,418 @@
     border: 1px solid var(--slate-200);
     border-radius: var(--radius);
     box-shadow: 0 4px 32px rgba(0,0,0,0.04);
-    margin-bottom: 24px;
-    overflow: hidden;
+    margin-bottom: 24px; overflow: hidden;
   }
   .card-body { padding: 36px 32px; }
   @media (max-width: 600px) { .card-body { padding: 24px 18px; } }
 
   /* ── SCORE CARD ──────────────────────────────── */
   .score-card { text-align: center; }
-  .score-company {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--slate-900);
-    margin-bottom: 4px;
-    letter-spacing: -0.5px;
-  }
-  .score-meta {
-    font-size: 14px;
-    color: var(--slate-500);
-    margin-bottom: 32px;
-  }
-
-  .score-ring {
-    position: relative;
-    width: 200px; height: 200px;
-    margin: 0 auto 24px;
-  }
+  .score-company { font-size: 28px; font-weight: 800; color: var(--slate-900); margin-bottom: 4px; letter-spacing: -0.5px; }
+  .score-meta { font-size: 14px; color: var(--slate-500); margin-bottom: 32px; }
+  .score-ring { position: relative; width: 200px; height: 200px; margin: 0 auto 24px; }
   .score-ring svg { width: 200px; height: 200px; }
   .score-ring .bg { stroke: var(--slate-100); }
-  .score-ring .fg {
-    stroke-linecap: round;
-    transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .score-ring .center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .score-ring .number {
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -2px;
-  }
-  .score-ring .sub {
-    font-size: 12px;
-    color: var(--slate-500);
-    margin-top: 4px;
-    font-weight: 500;
-  }
-
-  .score-label-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 22px;
-    border-radius: 100px;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
+  .score-ring .fg { stroke-linecap: round; transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .score-ring .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-ring .number { font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+  .score-ring .sub { font-size: 12px; color: var(--slate-500); margin-top: 4px; font-weight: 500; }
+  .score-label-tag { display: inline-flex; align-items: center; gap: 8px; padding: 8px 22px; border-radius: 100px; font-size: 16px; font-weight: 700; margin-bottom: 16px; }
   .score-label-tag .emoji { font-size: 22px; }
+  .score-verdict { font-size: 16px; font-weight: 500; color: var(--slate-700); max-width: 440px; margin: 0 auto; line-height: 1.55; }
+  .quick-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 32px; }
+  @media (max-width: 600px) { .quick-stats { grid-template-columns: 1fr; } }
+  .stat-box { padding: 16px; background: var(--slate-50); border: 1px solid var(--slate-100); border-radius: var(--radius-sm); }
+  .stat-box .stat-label { font-size: 10px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-box .stat-value { font-size: 16px; font-weight: 700; color: var(--slate-900); }
+  .stat-box .stat-sub { font-size: 12px; color: var(--slate-500); margin-top: 2px; }
 
-  .score-verdict {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--slate-700);
-    max-width: 440px;
-    margin: 0 auto;
-    line-height: 1.55;
-  }
-
-  .quick-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 32px;
-  }
-  @media (max-width: 600px) {
-    .quick-stats { grid-template-columns: 1fr; }
-  }
-  .stat-box {
-    padding: 16px;
-    background: var(--slate-50);
-    border: 1px solid var(--slate-100);
-    border-radius: var(--radius-sm);
-  }
-  .stat-box .stat-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--slate-500);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  .stat-box .stat-value {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--slate-900);
-  }
-  .stat-box .stat-sub {
-    font-size: 12px;
-    color: var(--slate-500);
-    margin-top: 2px;
-  }
-
-  /* ── SECTION TITLES ──────────────────────────── */
-  .section-title {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--slate-900);
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-  }
+  /* ── SECTION TITLES IN CARDS ─────────────────── */
+  .section-title { font-size: 24px; font-weight: 800; color: var(--slate-900); margin-bottom: 6px; letter-spacing: -0.5px; }
   .section-title .accent { color: var(--teal); }
-  .section-divider {
-    height: 2px;
-    background: linear-gradient(90deg, var(--teal-light), transparent);
-    border: none;
-    margin-bottom: 24px;
-  }
+  .section-divider { height: 2px; background: linear-gradient(90deg, var(--teal-light), transparent); border: none; margin-bottom: 24px; }
 
-  /* ── STORY ───────────────────────────────────── */
-  .story p {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--slate-700);
-    margin-bottom: 16px;
-  }
+  /* ── STORY ────────────────────────────────────── */
+  .story p { font-size: 15px; line-height: 1.8; color: var(--slate-700); margin-bottom: 16px; }
 
   /* ── CLAUDE SECTION ──────────────────────────── */
-  .claude-group-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
+  .claude-group-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
   .claude-group-title .icon { font-size: 18px; }
-  .claude-item {
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    line-height: 1.55;
-    margin-bottom: 6px;
-    border-left: 3px solid;
-  }
-  .claude-item.can {
-    background: var(--green-bg);
-    color: var(--green-700);
-    border-color: var(--teal);
-  }
-  .claude-item.cannot {
-    background: var(--red-bg);
-    color: var(--red-800);
-    border-color: var(--coral);
-  }
-  .claude-summary {
-    margin-top: 24px;
-    padding: 20px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #f0f9ff, #f0fdf4);
-    border: 1px solid #e0f2fe;
-    font-size: 15px;
-    font-style: italic;
-    color: var(--slate-700);
-    line-height: 1.7;
-  }
+  .claude-item { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 14px; line-height: 1.55; margin-bottom: 6px; border-left: 3px solid; }
+  .claude-item.can { background: var(--green-bg); color: var(--green-700); border-color: var(--teal); }
+  .claude-item.cannot { background: var(--red-bg); color: var(--red-800); border-color: var(--coral); }
+  .claude-summary { margin-top: 24px; padding: 20px; border-radius: 14px; background: linear-gradient(135deg, #f0f9ff, #f0fdf4); border: 1px solid #e0f2fe; font-size: 15px; font-style: italic; color: var(--slate-700); line-height: 1.7; }
 
   /* ── DIMENSION BARS ──────────────────────────── */
   .dim-row { margin-bottom: 22px; }
-  .dim-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 6px;
-  }
+  .dim-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
   .dim-name { font-size: 14px; font-weight: 600; color: var(--slate-900); }
   .dim-score { font-size: 13px; font-weight: 700; }
-  .dim-track {
-    height: 10px;
-    background: var(--slate-100);
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  .dim-fill {
-    height: 100%;
-    border-radius: 5px;
-    width: 0%;
-    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .dim-note {
-    font-size: 12px;
-    color: var(--slate-500);
-    margin-top: 5px;
-    line-height: 1.5;
-  }
-  .dim-hint {
-    margin-top: 28px;
-    padding: 14px 18px;
-    border-radius: var(--radius-sm);
-    background: var(--amber-light);
-    border: 1px solid #FDE68A;
-    font-size: 13px;
-    color: #92400E;
-    line-height: 1.6;
-  }
+  .dim-track { height: 10px; background: var(--slate-100); border-radius: 5px; overflow: hidden; }
+  .dim-fill { height: 100%; border-radius: 5px; width: 0%; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .dim-note { font-size: 12px; color: var(--slate-500); margin-top: 5px; line-height: 1.5; }
+  .dim-hint { margin-top: 28px; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--amber-light); border: 1px solid #FDE68A; font-size: 13px; color: #92400E; line-height: 1.6; }
 
   /* ── SKILL CODE BLOCK ────────────────────────── */
-  .code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .copy-btn {
-    padding: 8px 18px;
-    border-radius: 8px;
-    background: var(--slate-100);
-    border: 1px solid var(--slate-200);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--slate-700);
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    transition: all 0.2s;
-  }
+  .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .copy-btn { padding: 8px 18px; border-radius: 8px; background: var(--slate-100); border: 1px solid var(--slate-200); font-size: 13px; font-weight: 600; color: var(--slate-700); cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; }
   .copy-btn:hover { background: var(--teal-bg); border-color: var(--teal-light); color: var(--teal); }
   .copy-btn.copied { background: var(--teal); color: #fff; border-color: var(--teal); }
-  .code-block {
+  .code-block { background: var(--slate-900); color: var(--slate-200); padding: 24px; border-radius: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; overflow-x: auto; white-space: pre; border: 1px solid #1E293B; }
+  .code-caption { font-size: 12px; color: var(--slate-500); margin-top: 12px; }
+
+  /* ── CTA SECTION ─────────────────────────────── */
+  .cta-section {
+    padding: 80px 24px;
+    text-align: center;
     background: var(--slate-900);
-    color: var(--slate-200);
-    padding: 24px;
-    border-radius: 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.7;
-    overflow-x: auto;
-    white-space: pre;
-    border: 1px solid #1E293B;
+    color: #fff;
   }
-  .code-caption {
-    font-size: 12px;
-    color: var(--slate-500);
-    margin-top: 12px;
+  .cta-section h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800; letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .cta-section p {
+    font-size: 17px; color: var(--slate-400);
+    max-width: 520px; margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+  .cta-section .btn-primary {
+    background: var(--teal);
+    box-shadow: 0 2px 16px rgba(13,148,136,0.35);
+  }
+  .cta-section .btn-secondary {
+    background: transparent;
+    color: var(--slate-300);
+    border: 1px solid var(--slate-700);
+  }
+  .cta-section .btn-secondary:hover {
+    border-color: var(--teal); color: var(--teal-light); background: transparent;
   }
 
   /* ── FOOTER ──────────────────────────────────── */
   .footer {
-    text-align: center;
-    padding: 48px 24px 32px;
-    font-size: 12px;
-    color: var(--slate-500);
-    line-height: 1.7;
+    padding: 40px 24px;
+    background: var(--slate-900);
+    border-top: 1px solid var(--slate-800);
   }
-  .footer a { color: var(--teal); text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
+  .footer-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .footer-col h4 {
+    font-size: 12px; font-weight: 600;
+    color: var(--slate-400);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px; color: var(--slate-500);
+    text-decoration: none;
+    padding: 3px 0;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--teal-light); }
+  .footer-col p {
+    font-size: 13px; color: var(--slate-500);
+    line-height: 1.6; max-width: 280px;
+  }
+  .footer-bottom {
+    max-width: var(--max-w); margin: 0 auto;
+    padding-top: 24px; margin-top: 24px;
+    border-top: 1px solid var(--slate-800);
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+    font-size: 12px; color: var(--slate-500);
+  }
+  .footer-bottom a { color: var(--slate-500); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--teal-light); }
 
   /* ── ANIMATIONS ──────────────────────────────── */
   .fade-up {
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 0; transform: translateY(28px);
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
-  .fade-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
+
+<!-- ═══ NAV ════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><span class="logo-dot"></span> SaaSpocalypse</a>
+    <div class="nav-links">
+      <a href="#was-ist-das">Was ist das?</a>
+      <a href="#methodik">Methodik</a>
+      <a href="#beispiel">Beispiel</a>
+      <a href="https://github.com/GodModeAI2025/SaaSpocalypse-Survival-Scanner" target="_blank" rel="noopener" class="gh-btn">
+        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
 
 <!-- ═══ HERO ═══════════════════════════════════════════ -->
 <section class="hero">
   <div class="hero-badge"><span class="dot"></span> SaaSpocalypse Survival Scanner</div>
   <h1>Software stirbt nicht.<br>Sie wird zum <span>Skill</span>.</h1>
-  <p class="tagline">Analysiert SaaS-Unternehmen und bewertet, ob sie durch einen Claude Skill ersetzt werden könnten. Disruption Score, charmante Story, ehrliche Selbsteinschätzung.</p>
-  <div class="disclaimer-bar">⚡ Unterhaltung mit analytischem Kern — keine Investmentberatung.</div>
+  <p class="tagline">Jedes SaaS-Produkt auf den Prüfstand: Kann ein Claude Skill — eine einfache <code style="background: var(--slate-100); padding: 2px 8px; border-radius: 4px; font-size: 16px;">.md</code>-Datei — dieses Produkt ersetzen? Der Scanner liefert die Antwort.</p>
+  <div class="hero-actions">
+    <a href="https://github.com/GodModeAI2025/SaaSpocalypse-Survival-Scanner" target="_blank" rel="noopener" class="btn btn-primary">
+      <svg viewBox="0 0 16 16" fill="#fff"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      Auf GitHub ansehen
+    </a>
+    <a href="#beispiel" class="btn btn-secondary">Beispiel ansehen ↓</a>
+  </div>
+  <div class="disclaimer-bar">Unterhaltung mit analytischem Kern — keine Investmentberatung.</div>
 </section>
 
-<!-- ═══ MAIN ═══════════════════════════════════════════ -->
-<div class="container">
+<!-- ═══ WAS IST DAS? ══════════════════════════════════ -->
+<section class="section" id="was-ist-das">
+  <div class="section-inner">
+    <div class="section-eyebrow">Überblick</div>
+    <h2 class="section-heading">Was ist der SaaSpocalypse Survival Scanner?</h2>
+    <p class="section-sub">Ein Claude Skill, der SaaS-Unternehmen auf sieben Dimensionen analysiert und einen gewichteten Disruption Score berechnet. Das Ergebnis: eine ehrliche, unterhaltsame Einschätzung, wie viel von einem Produkt heute schon ein KI-Prompt sein könnte — und was nicht.</p>
 
-  <div class="example-label">
-    <span>Beispiel-Analyse: GitHub</span>
-  </div>
-
-  <!-- ── SCORE ───────────────────────────────────── -->
-  <div class="card fade-up">
-    <div class="card-body score-card">
-      <div class="score-company">GitHub</div>
-      <div class="score-meta">github.com · Microsoft · San Francisco, US</div>
-
-      <div class="score-ring">
-        <svg viewBox="0 0 200 200">
-          <circle class="bg" cx="100" cy="100" r="84" fill="none" stroke-width="11" />
-          <circle class="fg" cx="100" cy="100" r="84" fill="none" stroke-width="11"
-            stroke="#0D9488"
-            stroke-dasharray="527.79"
-            stroke-dashoffset="527.79"
-            transform="rotate(-90 100 100)"
-            id="scoreArc" />
-        </svg>
-        <div class="center">
-          <span class="number" style="color: var(--teal);" id="scoreNum">0</span>
-          <span class="sub">von 100</span>
-        </div>
+    <div class="features">
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--teal-bg);">🎯</div>
+        <h3>Disruption Score (0–100)</h3>
+        <p>Gewichteter Score über sieben Dimensionen — von Workflow-Komplexität bis Preismodell-Vulnerabilität. Kalibriert an echten Unternehmen wie Stripe, Salesforce oder Jasper AI.</p>
       </div>
-
-      <div class="score-label-tag" style="background: var(--teal-bg); border: 1px solid var(--teal-light); color: var(--teal);">
-        <span class="emoji">🏰</span> Festung
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--indigo-light);">📖</div>
+        <h3>Die Story</h3>
+        <p>Keine trockene Analyse — eine charmant-satirische Geschichte über das Unternehmen. Faktisch fundiert, spezifisch auf das Produkt bezogen, und nie gemein.</p>
       </div>
-
-      <p class="score-verdict">Microsofts Entwickler-Gravitationszentrum. Hier lebt der Code der Welt — und Netzwerkeffekte sind der ultimative Burggraben.</p>
-
-      <div class="quick-stats">
-        <div class="stat-box">
-          <div class="stat-label">Stärkstes Moat</div>
-          <div class="stat-value">Netzwerkeffekte</div>
-          <div class="stat-sub">100M+ Entwickler</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Schwächstes Moat</div>
-          <div class="stat-value">Einfache Workflows</div>
-          <div class="stat-sub">Issues, Wikis, Readmes</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Kern-Differenzierung</div>
-          <div class="stat-value">Git-Hosting</div>
-          <div class="stat-sub">+ Actions + Copilot</div>
-        </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--amber-light);">🤖</div>
+        <h3>Claudes Selbsteinschätzung</h3>
+        <p>Was kann KI an diesem Produkt ersetzen? Was nicht — und warum? Ehrlich, selbstironisch, mit konkreten Beispielen. Aus der Ich-Perspektive.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--green-bg);">📝</div>
+        <h3>Replacement SKILL.md</h3>
+        <p>Ein vollständiger, kopierbarer Skill-Entwurf, der zeigt, wie ein Claude Skill das Produkt (teilweise) ersetzen würde. Inklusive satirischem „What NOT To Do".</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--coral-light);">📊</div>
+        <h3>7-Dimensionen-Analyse</h3>
+        <p>Detaillierte Aufschlüsselung aller Scoring-Dimensionen mit Einzelwerten und Erklärungen. Visualisiert als interaktive Balken oder im PDF als Tabelle.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon" style="background: var(--slate-100);">📄</div>
+        <h3>Zwei Ausgabeformate</h3>
+        <p>Interaktives HTML-Artifact für den Chat oder professioneller PDF-Report zum Verschicken und Ausdrucken. Auf Wunsch auch beides gleichzeitig.</p>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ── STORY ───────────────────────────────────── -->
-  <div class="card fade-up">
-    <div class="card-body story">
-      <h2 class="section-title"><span class="accent">·</span> Die Story</h2>
-      <hr class="section-divider">
-      <p>Stellt euch vor: 2008, ein kleines Startup namens GitHub tritt an und sagt dem Entwickler-Universum: „Hey, wir machen Git hübsch." Was klingt wie eine Semesterarbeit, wurde zum digitalen Gravitationszentrum der gesamten Software-Industrie.</p>
-      <p>Heute leben auf GitHub über 100 Millionen Entwickler, 420 Millionen Repositories, und der Großteil aller Open-Source-Projekte, die das Internet am Laufen halten. Microsoft hat 2018 mit 7,5 Milliarden Dollar zugegriffen — und seitdem GitHub Actions, Copilot, Codespaces und ein komplettes DevOps-Ökosystem draufgepackt.</p>
-      <p>Der Witz an GitHub ist: Die eigentliche Technologie — Git — ist Open Source und kostenlos. Jeder kann einen Git-Server betreiben. GitLab, Bitbucket, Gitea — es gibt Alternativen. Aber niemand geht hin. Weil GitHub nicht Git ist. GitHub ist der Ort, wo 100 Millionen Entwickler bereits sind. Netzwerkeffekte sind ein Moat, den kein Skill der Welt graben kann.</p>
-      <p>Wo Claude allerdings an den Rändern knabbern kann: Issues schreiben, Pull Request Reviews, README-Generierung, Documentation, Wiki-Pflege, CI/CD-Konfiguration — das sind alles Text-Workflows, die ein LLM direkt ausführen kann. GitHub weiß das natürlich und hat Copilot als Antwort. Clever: Wenn KI dein Geschäft bedroht, werde selbst zur KI.</p>
-      <p>GitHub ist kein SaaS, das man durch einen Skill ersetzt. GitHub ist Infrastruktur. Wie Strom. Man kann das Licht besser nutzen — aber man ersetzt nicht das Kraftwerk.</p>
+<!-- ═══ METHODIK ══════════════════════════════════════ -->
+<section class="section section-alt" id="methodik">
+  <div class="section-inner">
+    <div class="section-eyebrow">Methodik</div>
+    <h2 class="section-heading">Wie wird der Score berechnet?</h2>
+    <p class="section-sub">Sieben Dimensionen, unterschiedlich gewichtet. Jede Dimension bewertet einen Aspekt, der ein SaaS-Produkt vor KI-Disruption schützt — oder verwundbar macht.</p>
+
+    <div class="dim-explainer fade-up">
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>Workflow-Komplexität</h4><span class="weight">20%</span></div>
+        <p>Einfache Text-/Daten-Transformation? Hoch ersetzbar. Komplexe Multi-System-Orchestrierung mit Echtzeit-Abhängigkeiten? Schwer ersetzbar.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>Daten-Moat</h4><span class="weight">20%</span></div>
+        <p>Proprietäre Daten, die nicht replizierbar sind? Nutzerdaten, Netzwerkeffekte, historische Datasets — alles, was ein Skill nicht mitbringt.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>Physische Infrastruktur</h4><span class="weight">15%</span></div>
+        <p>Braucht das Produkt Hardware, Server, Echtzeit-Systeme? Eine .md-Datei kann kein DNS betreiben und keine Pakete ausliefern.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>Regulatorischer Schutz</h4><span class="weight">15%</span></div>
+        <p>Lizenzen, Zertifizierungen, Compliance-Anforderungen — regulatorische Burggraben, die kein Prompt überbrücken kann.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>Integrations-Tiefe</h4><span class="weight">15%</span></div>
+        <p>Wie tief ist das Produkt in Kunden-Workflows eingebettet? API-Ökosystem, Marketplace, Partner-Netzwerk — das schafft Wechselkosten.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-card-head"><h4>UI/UX-Abhängigkeit</h4><span class="weight">10%</span></div>
+        <p>Braucht das Produkt eine komplexe, interaktive Echtzeit-UI? Oder ist es im Kern ein Text-Workflow mit hübscher Oberfläche?</p>
+      </div>
+      <div class="dim-card" style="grid-column: 1 / -1;">
+        <div class="dim-card-head"><h4>Preismodell-Vulnerabilität</h4><span class="weight">5%</span></div>
+        <p>Ist das Pricing offensichtlich überhöht für das, was geliefert wird? Seat-based Pricing für Dinge, die ein LLM trivial kann, ist ein Warnsignal.</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- ── CLAUDE ──────────────────────────────────── -->
-  <div class="card fade-up">
-    <div class="card-body">
-      <h2 class="section-title"><span class="accent">·</span> Claude sagt…</h2>
-      <hr class="section-divider">
+<!-- ═══ SCORE-SKALA ═══════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">Score-Kategorien</div>
+    <h2 class="section-heading">Von Unantastbar bis War nie nötig</h2>
+    <p class="section-sub">Der Disruption Score reicht von 0 (absolut unersetzbar) bis 100 (war eigentlich immer nur ein Prompt). Sieben Kategorien ordnen das Ergebnis ein.</p>
 
-      <div style="margin-bottom: 24px;">
-        <div class="claude-group-title" style="color: var(--teal);">
-          <span class="icon">✅</span> Was ich ersetzen kann
+    <div class="fade-up">
+      <div class="scale-row" style="border-color: var(--teal);">
+        <span class="scale-range" style="color: var(--teal);">0–10</span>
+        <span class="scale-emoji">🏛️</span>
+        <span class="scale-label" style="color: var(--teal);">Unantastbar</span>
+        <span class="scale-desc">Physische Infrastruktur, Regulierung oder fundamentale Internet-Schicht. Kein .md-File kann das ersetzen.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--teal);">
+        <span class="scale-range" style="color: var(--teal);">11–25</span>
+        <span class="scale-emoji">🏰</span>
+        <span class="scale-label" style="color: var(--teal);">Festung</span>
+        <span class="scale-desc">Starke Moats: Daten, Netzwerkeffekte, tiefe Integration. Sehr schwer zu ersetzen.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--amber);">
+        <span class="scale-range" style="color: var(--amber);">26–40</span>
+        <span class="scale-emoji">😰</span>
+        <span class="scale-label" style="color: var(--amber);">Ins Schwitzen</span>
+        <span class="scale-desc">Verwundbar in Teilen. Kern-Moat existiert, aber AI knabbert an den Rändern.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--amber);">
+        <span class="scale-range" style="color: var(--amber);">41–60</span>
+        <span class="scale-emoji">🫠</span>
+        <span class="scale-label" style="color: var(--amber);">Wackelkandidat</span>
+        <span class="scale-desc">Signifikante Teile des Produkts sind durch einen Skill abbildbar. Differenzierung schrumpft.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--orange);">
+        <span class="scale-range" style="color: var(--orange);">61–80</span>
+        <span class="scale-emoji">📉</span>
+        <span class="scale-label" style="color: var(--orange);">Auf der Kippe</span>
+        <span class="scale-desc">Der Großteil des Produkts ist ein Workflow, den ein LLM direkt ausführen kann.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--coral);">
+        <span class="scale-range" style="color: var(--coral);">81–95</span>
+        <span class="scale-emoji">🫧</span>
+        <span class="scale-label" style="color: var(--coral);">Fast weg</span>
+        <span class="scale-desc">Das Produkt ist im Wesentlichen eine UI um einen Prozess, den Claude besser kann.</span>
+      </div>
+      <div class="scale-row" style="border-color: var(--coral);">
+        <span class="scale-range" style="color: var(--coral);">96–100</span>
+        <span class="scale-emoji">🪄</span>
+        <span class="scale-label" style="color: var(--coral);">War nie nötig</span>
+        <span class="scale-desc">Das Produkt hätte nie existieren sollen. Es ist buchstäblich ein Prompt.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BEISPIEL ══════════════════════════════════════ -->
+<section class="example-section" id="beispiel">
+  <div class="section-inner">
+    <div class="section-eyebrow">Live-Beispiel</div>
+    <h2 class="section-heading">GitHub im Scanner</h2>
+    <p class="section-sub">So sieht ein vollständiger Scan aus — am Beispiel einer der größten Entwickler-Plattformen der Welt.</p>
+
+    <div class="example-badge">Beispiel-Analyse: GitHub · Score 18/100</div>
+
+    <!-- SCORE -->
+    <div class="card fade-up">
+      <div class="card-body score-card">
+        <div class="score-company">GitHub</div>
+        <div class="score-meta">github.com · Microsoft · San Francisco, US</div>
+        <div class="score-ring">
+          <svg viewBox="0 0 200 200">
+            <circle class="bg" cx="100" cy="100" r="84" fill="none" stroke-width="11" />
+            <circle class="fg" cx="100" cy="100" r="84" fill="none" stroke-width="11"
+              stroke="#0D9488" stroke-dasharray="527.79" stroke-dashoffset="527.79"
+              transform="rotate(-90 100 100)" id="scoreArc" />
+          </svg>
+          <div class="center">
+            <span class="number" style="color: var(--teal);" id="scoreNum">0</span>
+            <span class="sub">von 100</span>
+          </div>
         </div>
-        <div class="claude-item can">README.md-Dateien schreiben, die tatsächlich jemand liest</div>
-        <div class="claude-item can">Issue-Templates, Pull Request Descriptions und Changelogs generieren</div>
-        <div class="claude-item can">GitHub Actions Workflows konfigurieren und debuggen</div>
-        <div class="claude-item can">Code Reviews durchführen und Verbesserungen vorschlagen</div>
-        <div class="claude-item can">Documentation und Wiki-Seiten erstellen und pflegen</div>
-        <div class="claude-item can">CODEOWNERS, .gitignore und Repo-Konfiguration optimieren</div>
-      </div>
-
-      <div style="margin-bottom: 0;">
-        <div class="claude-group-title" style="color: var(--coral);">
-          <span class="icon">❌</span> Was ich nicht ersetzen kann
+        <div class="score-label-tag" style="background: var(--teal-bg); border: 1px solid var(--teal-light); color: var(--teal);">
+          <span class="emoji">🏰</span> Festung
         </div>
-        <div class="claude-item cannot">Ein Git-Repository hosten — ich bin kein Server</div>
-        <div class="claude-item cannot">100 Millionen Entwickler-Profile und deren Commit-History</div>
-        <div class="claude-item cannot">GitHub Actions Runner — CI/CD braucht echte Compute-Infrastruktur</div>
-        <div class="claude-item cannot">Pull Requests mit Branch Protection, Status Checks und Merge Queues</div>
-        <div class="claude-item cannot">Das Social-Graph: Stars, Forks, Followers, Contributions-Heatmap</div>
-        <div class="claude-item cannot">GitHub Packages, Container Registry, Dependabot-Ökosystem</div>
-      </div>
-
-      <div class="claude-summary">
-        „Ich bin ziemlich gut darin, die Texte rund um Code zu schreiben — READMEs, Issues, Docs, Reviews. Aber GitHub selbst? Das ist Infrastruktur mit 100 Millionen Nutzern. Ich kann die Deko machen, aber ich bin nicht das Gebäude."
+        <p class="score-verdict">Microsofts Entwickler-Gravitationszentrum. Hier lebt der Code der Welt — und Netzwerkeffekte sind der ultimative Burggraben.</p>
+        <div class="quick-stats">
+          <div class="stat-box"><div class="stat-label">Stärkstes Moat</div><div class="stat-value">Netzwerkeffekte</div><div class="stat-sub">100M+ Entwickler</div></div>
+          <div class="stat-box"><div class="stat-label">Schwächstes Moat</div><div class="stat-value">Einfache Workflows</div><div class="stat-sub">Issues, Wikis, Readmes</div></div>
+          <div class="stat-box"><div class="stat-label">Kern-Differenzierung</div><div class="stat-value">Git-Hosting</div><div class="stat-sub">+ Actions + Copilot</div></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── ANALYSIS ────────────────────────────────── -->
-  <div class="card fade-up">
-    <div class="card-body">
-      <h2 class="section-title"><span class="accent">·</span> Analyse im Detail</h2>
-      <hr class="section-divider">
-      <p style="font-size: 14px; color: var(--slate-500); margin-bottom: 28px;">
-        7 Dimensionen · Gewichteter Durchschnitt = <strong style="color: var(--teal);">18/100</strong>
-      </p>
-
-      <div id="dimensions"></div>
-
-      <div class="dim-hint">
-        <strong>Lesehinweis:</strong> Ein niedriger Score (z.B. 5) bedeutet, dass diese Dimension das Unternehmen <em>schützt</em> — schwer durch KI zu ersetzen. Ein hoher Score (z.B. 60) bedeutet hohe Verwundbarkeit.
+    <!-- STORY -->
+    <div class="card fade-up">
+      <div class="card-body story">
+        <h2 class="section-title"><span class="accent">·</span> Die Story</h2>
+        <hr class="section-divider">
+        <p>Stellt euch vor: 2008, ein kleines Startup namens GitHub tritt an und sagt dem Entwickler-Universum: „Hey, wir machen Git hübsch." Was klingt wie eine Semesterarbeit, wurde zum digitalen Gravitationszentrum der gesamten Software-Industrie.</p>
+        <p>Heute leben auf GitHub über 100 Millionen Entwickler, 420 Millionen Repositories, und der Großteil aller Open-Source-Projekte, die das Internet am Laufen halten. Microsoft hat 2018 mit 7,5 Milliarden Dollar zugegriffen — und seitdem GitHub Actions, Copilot, Codespaces und ein komplettes DevOps-Ökosystem draufgepackt.</p>
+        <p>Der Witz an GitHub ist: Die eigentliche Technologie — Git — ist Open Source und kostenlos. Jeder kann einen Git-Server betreiben. GitLab, Bitbucket, Gitea — es gibt Alternativen. Aber niemand geht hin. Weil GitHub nicht Git ist. GitHub ist der Ort, wo 100 Millionen Entwickler bereits sind. Netzwerkeffekte sind ein Moat, den kein Skill der Welt graben kann.</p>
+        <p>Wo Claude allerdings an den Rändern knabbern kann: Issues schreiben, Pull Request Reviews, README-Generierung, Documentation, Wiki-Pflege, CI/CD-Konfiguration — das sind alles Text-Workflows, die ein LLM direkt ausführen kann. GitHub weiß das natürlich und hat Copilot als Antwort. Clever: Wenn KI dein Geschäft bedroht, werde selbst zur KI.</p>
+        <p>GitHub ist kein SaaS, das man durch einen Skill ersetzt. GitHub ist Infrastruktur. Wie Strom. Man kann das Licht besser nutzen — aber man ersetzt nicht das Kraftwerk.</p>
       </div>
     </div>
-  </div>
 
-  <!-- ── SKILL.md ────────────────────────────────── -->
-  <div class="card fade-up">
-    <div class="card-body">
-      <div class="code-header">
-        <h2 class="section-title" style="margin-bottom: 0;"><span class="accent">·</span> Replacement SKILL.md</h2>
-        <button class="copy-btn" id="copyBtn" onclick="copySkill()">Kopieren</button>
+    <!-- CLAUDE -->
+    <div class="card fade-up">
+      <div class="card-body">
+        <h2 class="section-title"><span class="accent">·</span> Claude sagt…</h2>
+        <hr class="section-divider">
+        <div style="margin-bottom: 24px;">
+          <div class="claude-group-title" style="color: var(--teal);"><span class="icon">✅</span> Was ich ersetzen kann</div>
+          <div class="claude-item can">README.md-Dateien schreiben, die tatsächlich jemand liest</div>
+          <div class="claude-item can">Issue-Templates, Pull Request Descriptions und Changelogs generieren</div>
+          <div class="claude-item can">GitHub Actions Workflows konfigurieren und debuggen</div>
+          <div class="claude-item can">Code Reviews durchführen und Verbesserungen vorschlagen</div>
+          <div class="claude-item can">Documentation und Wiki-Seiten erstellen und pflegen</div>
+          <div class="claude-item can">CODEOWNERS, .gitignore und Repo-Konfiguration optimieren</div>
+        </div>
+        <div style="margin-bottom: 0;">
+          <div class="claude-group-title" style="color: var(--coral);"><span class="icon">❌</span> Was ich nicht ersetzen kann</div>
+          <div class="claude-item cannot">Ein Git-Repository hosten — ich bin kein Server</div>
+          <div class="claude-item cannot">100 Millionen Entwickler-Profile und deren Commit-History</div>
+          <div class="claude-item cannot">GitHub Actions Runner — CI/CD braucht echte Compute-Infrastruktur</div>
+          <div class="claude-item cannot">Pull Requests mit Branch Protection, Status Checks und Merge Queues</div>
+          <div class="claude-item cannot">Das Social-Graph: Stars, Forks, Followers, Contributions-Heatmap</div>
+          <div class="claude-item cannot">GitHub Packages, Container Registry, Dependabot-Ökosystem</div>
+        </div>
+        <div class="claude-summary">„Ich bin ziemlich gut darin, die Texte rund um Code zu schreiben — READMEs, Issues, Docs, Reviews. Aber GitHub selbst? Das ist Infrastruktur mit 100 Millionen Nutzern. Ich kann die Deko machen, aber ich bin nicht das Gebäude."</div>
       </div>
-      <hr class="section-divider">
-      <div class="code-block" id="skillCode">---
+    </div>
+
+    <!-- ANALYSIS -->
+    <div class="card fade-up">
+      <div class="card-body">
+        <h2 class="section-title"><span class="accent">·</span> Analyse im Detail</h2>
+        <hr class="section-divider">
+        <p style="font-size: 14px; color: var(--slate-500); margin-bottom: 28px;">
+          7 Dimensionen · Gewichteter Durchschnitt = <strong style="color: var(--teal);">18/100</strong>
+        </p>
+        <div id="dimensions"></div>
+        <div class="dim-hint"><strong>Lesehinweis:</strong> Ein niedriger Score (z.B. 5) bedeutet, dass diese Dimension das Unternehmen <em>schützt</em> — schwer durch KI zu ersetzen. Ein hoher Score (z.B. 60) bedeutet hohe Verwundbarkeit.</div>
+      </div>
+    </div>
+
+    <!-- SKILL.md -->
+    <div class="card fade-up">
+      <div class="card-body">
+        <div class="code-header">
+          <h2 class="section-title" style="margin-bottom: 0;"><span class="accent">·</span> Replacement SKILL.md</h2>
+          <button class="copy-btn" id="copyBtn" onclick="copySkill()">Kopieren</button>
+        </div>
+        <hr class="section-divider">
+        <div class="code-block" id="skillCode">---
 name: github-dev-assistant
 description: &gt;-
   Entwickler-Workflows rund um GitHub optimieren.
@@ -600,18 +766,50 @@ code hosting itself.
 Claude handles the text layer beautifully — but GitHub
 is infrastructure, not a text workflow. The building
 stays; we just redecorate the lobby.</div>
-      <p class="code-caption">Dieser Skill-Entwurf zeigt, wie ein Claude Skill die Text-Workflows rund um GitHub optimieren könnte.</p>
+        <p class="code-caption">Dieser Skill-Entwurf zeigt, wie ein Claude Skill die Text-Workflows rund um GitHub optimieren könnte.</p>
+      </div>
     </div>
   </div>
+</section>
 
-</div>
+<!-- ═══ CTA ═══════════════════════════════════════════ -->
+<section class="cta-section">
+  <h2>Eigenes SaaS scannen?</h2>
+  <p>Der Skill ist Open Source. Binde ihn als Claude Skill ein, nenne ein Unternehmen — und der Scanner legt los.</p>
+  <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+    <a href="https://github.com/GodModeAI2025/SaaSpocalypse-Survival-Scanner" target="_blank" rel="noopener" class="btn btn-primary">
+      <svg viewBox="0 0 16 16" fill="#fff" width="18" height="18"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      SKILL.md auf GitHub
+    </a>
+    <a href="#was-ist-das" class="btn btn-secondary">Mehr erfahren ↑</a>
+  </div>
+</section>
 
 <!-- ═══ FOOTER ═════════════════════════════════════════ -->
-<div class="footer">
-  SaaSpocalypse Survival Scanner<br>
-  Unterhaltung mit analytischem Kern — keine Investmentberatung.<br>
-  <a href="https://github.com">GitHub</a> ist ein eingetragenes Warenzeichen von GitHub, Inc. (Microsoft).
-</div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>SaaSpocalypse</h4>
+      <p>Software stirbt nicht. Sie wird zum Skill. Ein analytisch fundiertes Unterhaltungsformat — keine Investmentberatung.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Links</h4>
+      <a href="https://github.com/GodModeAI2025/SaaSpocalypse-Survival-Scanner" target="_blank" rel="noopener">GitHub Repository</a>
+      <a href="#was-ist-das">Was ist das?</a>
+      <a href="#methodik">Methodik</a>
+      <a href="#beispiel">Beispiel-Analyse</a>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <a href="https://godmodeai2025.github.io/MarkZimmermann/" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://github.com/GodModeAI2025/SaaSpocalypse-Survival-Scanner/blob/main/LICENSE" target="_blank" rel="noopener">Lizenz (MIT)</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 SaaSpocalypse Survival Scanner · <a href="https://godmodeai2025.github.io/MarkZimmermann/" target="_blank" rel="noopener">Impressum</a></span>
+    <span>GitHub ist ein eingetragenes Warenzeichen von GitHub, Inc. (Microsoft).</span>
+  </div>
+</footer>
 
 <script>
 // ── DIMENSIONS DATA ──────────────────────────────────
@@ -625,93 +823,54 @@ const dims = [
   { name: "Preismodell-Vulnerabilität", score: 15, note: "Free Tier für Open Source, Team/Enterprise für Firmen. Copilot als AI-Upsell. Faire Preisstruktur." },
 ];
 
-function getColor(score) {
-  if (score <= 25) return 'var(--teal)';
-  if (score <= 40) return 'var(--amber)';
-  if (score <= 60) return 'var(--orange)';
+function getColor(s) {
+  if (s <= 25) return 'var(--teal)';
+  if (s <= 40) return 'var(--amber)';
+  if (s <= 60) return 'var(--orange)';
   return 'var(--coral)';
 }
 
-// Render dimension bars
-const dimContainer = document.getElementById('dimensions');
-dims.forEach((dim, i) => {
-  const color = getColor(dim.score);
-  dimContainer.innerHTML += `
-    <div class="dim-row">
-      <div class="dim-header">
-        <span class="dim-name">${dim.name}</span>
-        <span class="dim-score" style="color:${color}">${dim.score}/100</span>
-      </div>
-      <div class="dim-track">
-        <div class="dim-fill" data-width="${dim.score}" style="background: linear-gradient(90deg, ${color}cc, ${color});" id="bar${i}"></div>
-      </div>
-      <div class="dim-note">${dim.note}</div>
-    </div>`;
+const dc = document.getElementById('dimensions');
+dims.forEach((d, i) => {
+  const c = getColor(d.score);
+  dc.innerHTML += `<div class="dim-row"><div class="dim-header"><span class="dim-name">${d.name}</span><span class="dim-score" style="color:${c}">${d.score}/100</span></div><div class="dim-track"><div class="dim-fill" style="background:linear-gradient(90deg,${c}cc,${c})" id="bar${i}"></div></div><div class="dim-note">${d.note}</div></div>`;
 });
 
 // ── SCORE ANIMATION ──────────────────────────────────
-const TARGET = 18;
-const CIRCUMFERENCE = 2 * Math.PI * 84; // 527.79
-
+const T = 18, C = 2 * Math.PI * 84;
 function animateScore() {
-  const arc = document.getElementById('scoreArc');
-  const num = document.getElementById('scoreNum');
-  const offset = CIRCUMFERENCE - (TARGET / 100) * CIRCUMFERENCE;
-  arc.style.strokeDashoffset = offset;
-
-  let current = 0;
-  const duration = 1800;
-  const start = performance.now();
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    num.textContent = Math.round(eased * TARGET);
-    if (progress < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+  document.getElementById('scoreArc').style.strokeDashoffset = C - (T/100)*C;
+  const s = performance.now();
+  (function tick(n) {
+    const p = Math.min((n-s)/1800, 1);
+    document.getElementById('scoreNum').textContent = Math.round((1-Math.pow(1-p,3))*T);
+    if (p < 1) requestAnimationFrame(tick);
+  })(s);
 }
 
-// ── BAR ANIMATION ────────────────────────────────────
 function animateBars() {
-  dims.forEach((dim, i) => {
-    setTimeout(() => {
-      const bar = document.getElementById('bar' + i);
-      if (bar) bar.style.width = dim.score + '%';
-    }, 300 + i * 120);
-  });
+  dims.forEach((d, i) => setTimeout(() => {
+    const b = document.getElementById('bar'+i);
+    if (b) b.style.width = d.score+'%';
+  }, 300+i*120));
 }
 
 // ── SCROLL REVEAL ────────────────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+const obs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) e.target.classList.add('visible');
+}), { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
 // ── COPY SKILL ───────────────────────────────────────
 function copySkill() {
-  const code = document.getElementById('skillCode').textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Kopiert!';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = 'Kopieren';
-      btn.classList.remove('copied');
-    }, 2000);
+  navigator.clipboard.writeText(document.getElementById('skillCode').textContent).then(() => {
+    const b = document.getElementById('copyBtn');
+    b.textContent = '✓ Kopiert!'; b.classList.add('copied');
+    setTimeout(() => { b.textContent = 'Kopieren'; b.classList.remove('copied'); }, 2000);
   });
 }
 
-// ── INIT ─────────────────────────────────────────────
-window.addEventListener('load', () => {
-  setTimeout(animateScore, 500);
-  setTimeout(animateBars, 800);
-});
+window.addEventListener('load', () => { setTimeout(animateScore, 600); setTimeout(animateBars, 900); });
 </script>
 </body>
 </html>
