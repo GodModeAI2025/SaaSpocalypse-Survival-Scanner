@@ -66,6 +66,17 @@ Bewerte auf einer Skala von **0–100** (0 = Unantastbar, 100 = War nie nötig):
 | **UI/UX-Abhängigkeit**         | 10%     | Braucht das Produkt eine komplexe, interaktive Echtzeit-UI die über Textinteraktion hinausgeht?                                                |
 | **Preismodell-Vulnerabilität** | 5%      | Ist das Pricing offensichtlich überhöht für das, was geliefert wird? Seat-based Pricing für Dinge, die ein LLM trivial kann?                   |
 
+#### Berechnung
+
+Damit derselbe Input zum selben Score führt, gilt für jede Dimension dieselbe Richtung:
+
+- **Jede Dimension wird als Ersetzbarkeit bewertet (0–100).** Hoher Wert = durch einen Skill leicht ersetzbar, niedriger Wert = starker Schutz. Ein starker Daten-Moat ergibt also einen *niedrigen* Wert bei „Daten-Moat“, ein simpler Text-Workflow einen *hohen* Wert bei „Workflow-Komplexität“.
+- **Ankerpunkte:** 0–19 starker, belegter Schutz · 20–39 deutlicher Schutz · 40–59 gemischt · 60–79 überwiegend ersetzbar · 80–100 belegt trivial ersetzbar.
+- **Gesamtscore** = Σ (Gewicht × Dimensionswert), auf eine ganze Zahl gerundet. Die Kategorie ergibt sich ausschließlich aus diesem Wert, nicht aus dem Bauchgefühl der Story.
+- **Dünne Datenlage:** Lässt sich eine Dimension nicht belegen, wird sie als „nicht bewertbar“ markiert, aus der Summe genommen und die übrigen Gewichte werden auf 100 % hochgerechnet. Das steht sichtbar im Analyse-Breakdown.
+
+Beispiel: Workflow 80 · Daten-Moat 70 · Infrastruktur 90 · Regulierung 85 · Integration 60 · UI/UX 75 · Preismodell 90 → 0,20·80 + 0,20·70 + 0,15·90 + 0,15·85 + 0,15·60 + 0,10·75 + 0,05·90 = 77,25 → **77 (Auf der Kippe)**.
+
 #### Score-Kategorien:
 
 | Score  | Label              | Emoji | Bedeutung                                                                                                |
@@ -111,8 +122,10 @@ Die Inhalte sind in beiden Formaten identisch. Der Unterschied liegt in der Dars
 - Bei "Unantastbar"-Firmen: Der SKILL.md endet mit einer humorvollen Kapitulation ("Status: IMPOSSIBLE — Claude ist smart, aber Claude ist kein globales DNS-Netzwerk")
 
 #### Sektion E: Analyse-Breakdown
-- Visualisierung der 7 Scoring-Dimensionen mit Einzelwerten
+- Visualisierung der 7 Scoring-Dimensionen mit Einzelwerten (Ersetzbarkeit 0–100, siehe Berechnung)
 - Kurze Erklärung je Dimension warum der Score so ausgefallen ist
+- Die Rechnung zum Gesamtscore in einer Zeile, inkl. Hinweis auf nicht bewertbare Dimensionen
+- **Quellen:** Die Belege für Preise, Features und Moats als Liste (URL + Abrufdatum). Was nicht belegt werden konnte, heißt „nicht belegt“ und wird nicht geschätzt, als wäre es ein Fakt
 
 ---
 
@@ -202,6 +215,7 @@ Das PDF übersetzt das freundliche Design in Druckformat:
   - Farbcodierte Header-Zeile in Teal
   - Alternierend weiße/hellgraue Zeilen
 - Kurze Erklärung je Dimension als Text unter der Tabelle
+- Rechenzeile zum Gesamtscore und Quellenliste (URL + Abrufdatum) unter den Erklärungen
 
 #### Seite 5: Replacement SKILL.md
 - Überschrift "Replacement SKILL.md"

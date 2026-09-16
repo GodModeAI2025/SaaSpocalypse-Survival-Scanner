@@ -629,7 +629,7 @@
     <h2 class="section-heading">GitHub im Scanner</h2>
     <p class="section-sub">So sieht ein vollständiger Scan aus — am Beispiel einer der größten Entwickler-Plattformen der Welt.</p>
 
-    <div class="example-badge">Beispiel-Analyse: GitHub · Score 18/100</div>
+    <div class="example-badge">Beispiel-Analyse: GitHub · Score 15/100</div>
 
     <!-- SCORE -->
     <div class="card fade-up">
@@ -706,7 +706,7 @@
         <h2 class="section-title"><span class="accent">·</span> Analyse im Detail</h2>
         <hr class="section-divider">
         <p style="font-size: 14px; color: var(--slate-500); margin-bottom: 28px;">
-          7 Dimensionen · Gewichteter Durchschnitt = <strong style="color: var(--teal);">18/100</strong>
+          7 Dimensionen · Gewichteter Durchschnitt = <strong style="color: var(--teal);">15/100</strong>
         </p>
         <div id="dimensions"></div>
         <div class="dim-hint"><strong>Lesehinweis:</strong> Ein niedriger Score (z.B. 5) bedeutet, dass diese Dimension das Unternehmen <em>schützt</em> — schwer durch KI zu ersetzen. Ein hoher Score (z.B. 60) bedeutet hohe Verwundbarkeit.</div>
@@ -837,7 +837,7 @@ dims.forEach((d, i) => {
 });
 
 // ── SCORE ANIMATION ──────────────────────────────────
-const T = 18, C = 2 * Math.PI * 84;
+const T = 15, C = 2 * Math.PI * 84;
 function animateScore() {
   document.getElementById('scoreArc').style.strokeDashoffset = C - (T/100)*C;
   const s = performance.now();
