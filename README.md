@@ -38,6 +38,8 @@ Der Score bewertet auf einer Skala von 0–100, wie ersetzbar ein SaaS-Produkt d
 | UI/UX-Abhängigkeit       | 10%     | Komplexe Echtzeit-UI jenseits von Text             |
 | Preismodell-Vulnerabilität | 5%    | Überhöhtes Pricing für KI-triviale Leistungen      |
 
+Jede Dimension wird in dieselbe Richtung bewertet: 0–100 als Ersetzbarkeit (hoch = leicht durch einen Skill ersetzbar). Der Disruption Score ist die gewichtete Summe, gerundet. Fehlen für eine Dimension Belege, wird sie als „nicht bewertbar“ ausgewiesen und die übrigen Gewichte werden hochgerechnet. Die Rechnung und die Quellen stehen im Analyse-Teil jedes Reports.
+
 ## Ausgabeformate
 
 ### HTML (Standard)
